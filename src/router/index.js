@@ -1,27 +1,65 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
+import NProgress from 'nprogress/nprogress.js'
+import 'nprogress/nprogress.css'
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
-
 const router = new VueRouter({
-  routes
+  routes: [
+    { path: "/", redirect: "/index" },
+    {
+      path: '/index',
+      name: 'index',
+      component: () => import('@/views/index.vue'),
+      meta: {
+        name: '首页',
+        headnavbar: false,
+        titlebbar: true
+      }
+    },
+    {
+      path: '/car',
+      name: 'car',
+
+      component: () => import('@/views/car.vue'),
+      meta: {
+        name: '购物车',
+        headnavbar: true,
+        titlebbar: true
+
+      }
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('@/views/user.vue'),
+      meta: {
+        name: '个人中心',
+        headnavbar: true,
+        titlebbar: true
+      }
+    },
+    {
+      path: '/son',
+      name: 'son',
+      component: () => import('@/views/son.vue'),
+      meta: {
+        name: '子页面',
+        headnavbar: true,
+        titlebbar: false,
+        tbbat: true
+      }
+    }
+  ]
+})
+NProgress.configure({ showSpinner: false })//清除圆圈
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  next()
+})
+router.afterEach((to, from) => {
+  NProgress.done();
+  // ...
 })
 
 export default router
